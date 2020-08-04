@@ -3,20 +3,21 @@ import './index.css';
 
 import Task from './Task';
 
-const TaskList = ({ todos }) => {
-  const elements = todos.map((item) => {
-    const { id, className, ...itemProps } = item;
-    return (
-      <li className={className} key={id}>
-        <Task {...itemProps} />
-        {className === 'editing' ? (
-          <input type='text' className='edit' value='Editing task' />
-        ) : null}
-      </li>
-    );
-  });
-
-  return <ul className='todo-list'>{elements}</ul>;
+const TaskList = ({ todos, toggleComplete, onDelete }) => {
+  return (
+    <ul className='todo-list'>
+      {todos.map((todo) => (
+        <li className={todo.complete ? 'completed' : null}>
+          <Task
+            key={todo.id}
+            toggleComplete={() => toggleComplete(todo.id)}
+            onDelete={() => onDelete(todo.id)}
+            text={todo.text}
+          />
+        </li>
+      ))}
+    </ul>
+  );
 };
 
 export default TaskList;
