@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import PropTypes from 'prop-types';
 
 const Footer = ({ toDo, filter, onFilterChange, removeAllTaskComplete }) => {
   const filterButtons = [
@@ -29,6 +30,13 @@ const Footer = ({ toDo, filter, onFilterChange, removeAllTaskComplete }) => {
       </button>
     </footer>
   );
+};
+
+Footer.propTypes = {
+  toDo: PropTypes.number.isRequired,
+  filter: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+  removeAllTaskComplete: PropTypes.func.isRequired,
 };
 
 export default Footer;

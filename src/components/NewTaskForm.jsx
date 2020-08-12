@@ -1,8 +1,13 @@
 import React from 'react';
 import shortid from 'shortid';
 import './index.css';
+import PropTypes from 'prop-types';
 
 export default class NewTaskForm extends React.Component {
+  static propTypes = {
+    text: PropTypes.string,
+  };
+
   state = {
     text: '',
   };

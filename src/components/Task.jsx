@@ -1,5 +1,6 @@
 import React from 'react';
 import './index.css';
+import PropTypes from 'prop-types';
 
 const Task = ({ text, toggleComplete, onEdit, onDelete }) => {
   return (
@@ -12,6 +13,12 @@ const Task = ({ text, toggleComplete, onEdit, onDelete }) => {
       <button className='icon icon-destroy' onClick={onDelete}></button>
     </div>
   );
+};
+
+Task.propTypes = {
+  text: PropTypes.string.isRequired,
+  toggleComplete: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default Task;
