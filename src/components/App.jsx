@@ -1,6 +1,5 @@
 import React from 'react';
 import './index.css';
-
 import TaskList from './TaskList';
 import NewTaskForm from './NewTaskForm';
 import Footer from './Footer';
@@ -17,18 +16,23 @@ export default class App extends React.Component {
     });
   };
 
-  toggleComplete = (id) => {
-    this.setState({
-      todos: this.state.todos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            complete: !todo.complete,
-          };
-        } else {
-          return todo;
-        }
-      }),
+  getUpdateTask = (id, arr, propName) => {
+    return arr.map((el) => (el.id === id ? { ...el, [propName]: !el[propName] } : el));
+  };
+
+  onEdit = (id) => {
+    this.setState(({ todos }) => {
+      return {
+        todos: this.getUpdateTask(id, todos, 'isEditing'),
+      };
+    });
+  };
+
+  onComplete = (id) => {
+    this.setState(({ todos }) => {
+      return {
+        todos: this.getUpdateTask(id, todos, 'isCompleted'),
+      };
     });
   };
 
@@ -40,7 +44,7 @@ export default class App extends React.Component {
 
   removeAllTaskComplete = () => {
     this.setState({
-      todos: this.state.todos.filter((todo) => !todo.complete),
+      todos: this.state.todos.filter((todo) => !todo.isCompleted),
     });
   };
 
@@ -48,14 +52,26 @@ export default class App extends React.Component {
     if (filter === 'all') {
       return todos;
     } else if (filter === 'active') {
-      return todos.filter((todo) => !todo.complete);
+      return todos.filter((todo) => !todo.isCompleted);
     } else if (filter === 'complete') {
-      return todos.filter((todo) => todo.complete);
+      return todos.filter((todo) => todo.isCompleted);
     }
   };
 
   onFilterChange = (filter) => {
     this.setState({ filter });
+  };
+
+  editText = (id, text) => {
+    this.setState(({ todos }) => {
+      const updateTodos = todos.map((el) =>
+        el.id === id ? { ...el, text: text, isEditing: !el.isEditing } : el
+      );
+
+      return {
+        todos: updateTodos,
+      };
+    });
   };
 
   render() {
@@ -64,14 +80,20 @@ export default class App extends React.Component {
 
     return (
       <>
-        <NewTaskForm onSubmit={this.addTodo} />
+        <header className='header'>
+          <h1>todos</h1>
+          <NewTaskForm onSubmit={this.addTodo} />
+        </header>
         <TaskList
           todos={visibleTodos}
-          toggleComplete={this.toggleComplete}
+          onComplete={this.onComplete}
+          onEdit={this.onEdit}
           onDelete={this.onDelete}
+          onEditText={this.editText}
+          onBlur={this.onEdit}
         />
         <Footer
-          toDo={todos.filter((todo) => !todo.complete).length}
+          toDo={todos.filter((todo) => !todo.isCompleted).length}
           filter={filter}
           onFilterChange={this.onFilterChange}
           removeAllTaskComplete={this.removeAllTaskComplete}

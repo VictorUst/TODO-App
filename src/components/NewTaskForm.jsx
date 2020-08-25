@@ -14,7 +14,7 @@ export default class NewTaskForm extends React.Component {
 
   handleChange = (e) => {
     this.setState({
-      [e.target.name]: e.target.value,
+      text: e.target.value,
     });
   };
 
@@ -23,7 +23,8 @@ export default class NewTaskForm extends React.Component {
     this.props.onSubmit({
       id: shortid.generate(),
       text: this.state.text,
-      complete: false,
+      isCompleted: false,
+      isEditing: false,
     });
 
     this.setState({
@@ -33,19 +34,16 @@ export default class NewTaskForm extends React.Component {
 
   render() {
     return (
-      <header className='header'>
-        <h1>todos</h1>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            name='text'
-            className='new-todo'
-            placeholder='What needs to be done?'
-            autofocus
-            onChange={this.handleChange}
-            value={this.state.text}
-          />
-        </form>
-      </header>
+      <form onSubmit={this.handleSubmit}>
+        <input
+          name='text'
+          className='new-todo'
+          placeholder='What needs to be done?'
+          autofocus
+          onChange={this.handleChange}
+          value={this.state.text}
+        />
+      </form>
     );
   }
 }

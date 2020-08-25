@@ -4,27 +4,31 @@ import PropTypes from 'prop-types';
 
 import Task from './Task';
 
-const TaskList = ({ todos, toggleComplete, onDelete }) => {
+const TaskList = ({ todos, onComplete, onEdit, onDelete, onEditText, onBlur }) => {
   return (
     <ul className='todo-list'>
       {todos.map((todo) => (
-        <li className={todo.complete ? 'completed' : null}>
-          <Task
-            key={todo.id}
-            toggleComplete={() => toggleComplete(todo.id)}
-            onDelete={() => onDelete(todo.id)}
-            text={todo.text}
-          />
-        </li>
+        <Task
+          key={todo.id}
+          {...todo}
+          onComplete={() => onComplete(todo.id)}
+          onEdit={() => onEdit(todo.id)}
+          onDelete={() => onDelete(todo.id)}
+          onEditText={onEditText}
+          onBlur={onBlur}
+        />
       ))}
     </ul>
   );
 };
 
 TaskList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.element).isRequired,
-  toggleComplete: PropTypes.func.isRequired,
+  todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onComplete: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  onEditText: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
 };
 
 export default TaskList;
