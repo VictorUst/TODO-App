@@ -5,32 +5,19 @@ import PropTypes from 'prop-types';
 import TaskInput from './TaskInput';
 import TimeCreator from './TimeCreator';
 
-const Task = ({
-  id,
-  text,
-  isCompleted,
-  isEditing,
-  onComplete,
-  onEdit,
-  onDelete,
-  onEditText,
-  onBlur,
-  createdTime,
-}) => {
+const Task = ({ id, text, isCompleted, isEditing, onComplete, onEdit, onDelete, onEditText, onBlur, createdTime }) => {
   return (
     <li className={classNames({ completed: isCompleted }, { editing: isEditing })}>
-      <div className='view'>
-        <input className='toggle' type='checkbox' checked={!!isCompleted} onClick={onComplete} />
+      <div className="view">
+        <input className="toggle" type="checkbox" checked={!!isCompleted} onClick={onComplete} />
         <label>
-          <span className='description'>{text}</span>
+          <span className="description">{text}</span>
           <TimeCreator createdTime={createdTime} />
         </label>
-        <button className='icon icon-edit' onClick={onEdit} />
-        <button className='icon icon-destroy' onClick={onDelete} />
+        <button type="button" className="icon icon-edit" onClick={onEdit} label="edit" />
+        <button type="button" className="icon icon-destroy" onClick={onDelete} label="delete" />
       </div>
-      {isEditing ? (
-        <TaskInput text={text} id={id} onBlur={() => onBlur(id)} onEditText={onEditText} />
-      ) : null}
+      {isEditing ? <TaskInput text={text} id={id} onBlur={() => onBlur(id)} onEditText={onEditText} /> : null}
     </li>
   );
 };
