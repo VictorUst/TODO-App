@@ -9,16 +9,16 @@ export default class TaskInput extends React.Component {
     };
   }
 
-  handleInputChange = (e) => {
+  handleInputChange = (ev) => {
     this.setState({
-      text: e.target.value,
+      text: ev.target.value,
     });
   };
 
-  onKeyDown = (e) => {
+  onKeyDown = (ev) => {
     const { id, onEditText } = this.props;
     const { text } = this.state;
-    if (e.keyCode === 13) {
+    if (ev.keyCode === 13) {
       onEditText(id, text);
     }
   };
@@ -29,13 +29,12 @@ export default class TaskInput extends React.Component {
 
     return (
       <input
-        type='text'
-        className='edit'
-        onKeyDown={(e) => this.onKeyDown(e)}
+        type="text"
+        className="edit"
+        onKeyDown={(ev) => this.onKeyDown(ev)}
         onBlur={onBlur}
         onChange={this.handleInputChange}
         value={text}
-        autoFocus
       />
     );
   }

@@ -11,8 +11,9 @@ export default class App extends React.Component {
   };
 
   addTodo = (todo) => {
+    const { todos } = this.state;
     this.setState({
-      todos: [todo, ...this.state.todos],
+      todos: [todo, ...todos],
     });
   };
 
@@ -37,24 +38,29 @@ export default class App extends React.Component {
   };
 
   onDelete = (id) => {
+    const { todos } = this.state;
     this.setState({
-      todos: this.state.todos.filter((todo) => todo.id !== id),
+      todos: todos.filter((todo) => todo.id !== id),
     });
   };
 
   removeAllTaskComplete = () => {
+    const { todos } = this.state;
     this.setState({
-      todos: this.state.todos.filter((todo) => !todo.isCompleted),
+      todos: todos.filter((todo) => !todo.isCompleted),
     });
   };
 
   filterTask = (todos, filter) => {
-    if (filter === 'all') {
-      return todos;
-    } else if (filter === 'active') {
-      return todos.filter((todo) => !todo.isCompleted);
-    } else if (filter === 'complete') {
-      return todos.filter((todo) => todo.isCompleted);
+    switch (filter) {
+      case 'all':
+        return todos;
+      case 'active':
+        return todos.filter((todo) => !todo.isCompleted);
+      case 'complete':
+        return todos.filter((todo) => todo.isCompleted);
+      default:
+        return todos;
     }
   };
 
@@ -64,9 +70,7 @@ export default class App extends React.Component {
 
   editText = (id, text) => {
     this.setState(({ todos }) => {
-      const updateTodos = todos.map((el) =>
-        el.id === id ? { ...el, text: text, isEditing: !el.isEditing } : el
-      );
+      const updateTodos = todos.map((el) => (el.id === id ? { ...el, text, isEditing: !el.isEditing } : el));
 
       return {
         todos: updateTodos,
@@ -80,7 +84,7 @@ export default class App extends React.Component {
 
     return (
       <>
-        <header className='header'>
+        <header className="header">
           <h1>todos</h1>
           <NewTaskForm onSubmit={this.addTodo} />
         </header>

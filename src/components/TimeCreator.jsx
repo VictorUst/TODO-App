@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 export default class TimeCreator extends React.Component {
   constructor(props) {
     super();
+    const { createdTime } = props;
     this.state = {
-      createdTime: props.createdTime,
-      elapsedTime: formatDistanceToNow(props.createdTime, { includeSeconds: true }),
+      createdTime,
+      elapsedTime: formatDistanceToNow(createdTime, { includeSeconds: true }),
     };
     this.intervalId = null;
   }
@@ -29,7 +30,7 @@ export default class TimeCreator extends React.Component {
 
   render() {
     const { elapsedTime } = this.state;
-    return <span className='created'>created {elapsedTime} ago</span>;
+    return <span className="created">created {elapsedTime} ago</span>;
   }
 }
 

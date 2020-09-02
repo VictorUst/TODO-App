@@ -14,7 +14,7 @@ const Footer = ({ toDo, filter, onFilterChange, removeAllTaskComplete }) => {
 
     return (
       <li>
-        <button key={name} className={classNames} onClick={() => onFilterChange(name)}>
+        <button key={name} type="button" className={classNames} onClick={() => onFilterChange(name)}>
           {text}
         </button>
       </li>
@@ -22,10 +22,10 @@ const Footer = ({ toDo, filter, onFilterChange, removeAllTaskComplete }) => {
   });
 
   return (
-    <footer className='footer'>
-      <span className='todo-count'>{toDo} items left</span>
-      <ul className='filters'>{buttons}</ul>
-      <button className='clear-completed' onClick={() => removeAllTaskComplete()}>
+    <footer className="footer">
+      <span className="todo-count">{toDo} items left</span>
+      <ul className="filters">{buttons}</ul>
+      <button type="button" className="clear-completed" onClick={() => removeAllTaskComplete()}>
         Clear completed
       </button>
     </footer>

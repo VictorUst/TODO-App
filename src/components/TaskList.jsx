@@ -6,7 +6,7 @@ import Task from './Task';
 
 const TaskList = ({ todos, onComplete, onEdit, onDelete, onEditText, onBlur }) => {
   return (
-    <ul className='todo-list'>
+    <ul className="todo-list">
       {todos.map((todo) => (
         <Task
           key={todo.id}

@@ -9,7 +9,7 @@ const Task = ({ id, text, isCompleted, isEditing, onComplete, onEdit, onDelete, 
   return (
     <li className={classNames({ completed: isCompleted }, { editing: isEditing })}>
       <div className="view">
-        <input className="toggle" type="checkbox" checked={!!isCompleted} onClick={onComplete} />
+        <input className="toggle" type="checkbox" checked={isCompleted} onClick={onComplete} />
         <label>
           <span className="description">{text}</span>
           <TimeCreator createdTime={createdTime} />
