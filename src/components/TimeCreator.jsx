@@ -1,38 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
 
-export default class TimeCreator extends React.Component {
-  constructor(props) {
-    super();
-    const { createdTime } = props;
-    this.state = {
-      createdTime,
-      elapsedTime: formatDistanceToNow(createdTime, { includeSeconds: true }),
-    };
-    this.intervalId = null;
-  }
+const TimeCreator = (props) => {
+  const { createdTime } = props;
+  const [elapsedTime, setElapsedTime] = useState(formatDistanceToNow(createdTime, { includeSeconds: true }));
 
-  componentDidMount() {
-    this.intervalId = setInterval(() => this.timer(), 1000);
-  }
+  const timer = () => {
+    setElapsedTime(() => formatDistanceToNow(createdTime, { includeSeconds: true }));
+  };
 
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
+  useEffect(() => {
+    const intervalId = setInterval(() => timer(), 1000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  timer() {
-    const { createdTime } = this.state;
-    this.setState(() => ({
-      elapsedTime: formatDistanceToNow(createdTime, { includeSeconds: true }),
-    }));
-  }
-
-  render() {
-    const { elapsedTime } = this.state;
-    return <span className="created">created {elapsedTime} ago</span>;
-  }
-}
+  return <span className="created">created {elapsedTime} ago</span>;
+};
 
 TimeCreator.defaultProps = {
   createdTime: new Date(),
@@ -41,3 +26,5 @@ TimeCreator.defaultProps = {
 TimeCreator.propTypes = {
   createdTime: PropTypes.instanceOf(Date),
 };
+
+export default TimeCreator;

@@ -1,57 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import TaskList from './TaskList';
 import NewTaskForm from './NewTaskForm';
 import Footer from './Footer';
 
-export default class App extends React.Component {
-  state = {
-    todos: [],
-    filter: 'all',
+const App = () => {
+  const [todos, setTodos] = useState([]);
+
+  const [filter, setFilter] = useState('all');
+
+  const addTodo = (todo) => {
+    setTodos([todo, ...todos]);
   };
 
-  addTodo = (todo) => {
-    const { todos } = this.state;
-    this.setState({
-      todos: [todo, ...todos],
-    });
-  };
-
-  getUpdateTask = (id, arr, propName) => {
+  const getUpdateTask = (id, arr, propName) => {
     return arr.map((el) => (el.id === id ? { ...el, [propName]: !el[propName] } : el));
   };
 
-  onEdit = (id) => {
-    this.setState(({ todos }) => {
-      return {
-        todos: this.getUpdateTask(id, todos, 'isEditing'),
-      };
+  const onEdit = (id) => {
+    setTodos(getUpdateTask(id, todos, 'isEditing'));
+  };
+
+  const onComplete = (id) => {
+    setTodos(getUpdateTask(id, todos, 'isCompleted'));
+  };
+
+  const onDelete = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const editText = (id, text) => {
+    setTodos(() => {
+      const updateTodos = todos.map((el) => (el.id === id ? { ...el, text, isEditing: !el.isEditing } : el));
+
+      return updateTodos;
     });
   };
 
-  onComplete = (id) => {
-    this.setState(({ todos }) => {
-      return {
-        todos: this.getUpdateTask(id, todos, 'isCompleted'),
-      };
-    });
+  const removeAllTaskComplete = () => {
+    setTodos(todos.filter((todo) => !todo.isCompleted));
   };
 
-  onDelete = (id) => {
-    const { todos } = this.state;
-    this.setState({
-      todos: todos.filter((todo) => todo.id !== id),
-    });
-  };
-
-  removeAllTaskComplete = () => {
-    const { todos } = this.state;
-    this.setState({
-      todos: todos.filter((todo) => !todo.isCompleted),
-    });
-  };
-
-  filterTask = (todos, filter) => {
+  const filterTask = () => {
     switch (filter) {
       case 'all':
         return todos;
@@ -64,45 +54,34 @@ export default class App extends React.Component {
     }
   };
 
-  onFilterChange = (filter) => {
-    this.setState({ filter });
+  const onFilterChange = (filterValue) => {
+    setFilter(filterValue);
   };
 
-  editText = (id, text) => {
-    this.setState(({ todos }) => {
-      const updateTodos = todos.map((el) => (el.id === id ? { ...el, text, isEditing: !el.isEditing } : el));
+  const visibleTodos = filterTask(todos, filter);
 
-      return {
-        todos: updateTodos,
-      };
-    });
-  };
+  return (
+    <>
+      <header className="header">
+        <h1>todos</h1>
+        <NewTaskForm onSubmit={addTodo} />
+      </header>
+      <TaskList
+        todos={visibleTodos}
+        onComplete={onComplete}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onEditText={editText}
+        onBlur={onEdit}
+      />
+      <Footer
+        toDo={todos.filter((todo) => !todo.isCompleted).length}
+        filter={filter}
+        onFilterChange={onFilterChange}
+        removeAllTaskComplete={removeAllTaskComplete}
+      />
+    </>
+  );
+};
 
-  render() {
-    const { todos, filter } = this.state;
-    const visibleTodos = this.filterTask(todos, filter);
-
-    return (
-      <>
-        <header className="header">
-          <h1>todos</h1>
-          <NewTaskForm onSubmit={this.addTodo} />
-        </header>
-        <TaskList
-          todos={visibleTodos}
-          onComplete={this.onComplete}
-          onEdit={this.onEdit}
-          onDelete={this.onDelete}
-          onEditText={this.editText}
-          onBlur={this.onEdit}
-        />
-        <Footer
-          toDo={todos.filter((todo) => !todo.isCompleted).length}
-          filter={filter}
-          onFilterChange={this.onFilterChange}
-          removeAllTaskComplete={this.removeAllTaskComplete}
-        />
-      </>
-    );
-  }
-}
+export default App;

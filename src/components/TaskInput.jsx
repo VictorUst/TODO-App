@@ -1,44 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export default class TaskInput extends React.Component {
-  constructor(props) {
-    super();
-    this.state = {
-      text: props.text,
-    };
-  }
+const TaskInput = (props) => {
+  const { text } = props;
 
-  handleInputChange = (ev) => {
-    this.setState({
-      text: ev.target.value,
-    });
+  const [editText, setEditText] = useState(text);
+
+  const handleInputChange = (ev) => {
+    setEditText(ev.target.value);
   };
 
-  onKeyDown = (ev) => {
-    const { id, onEditText } = this.props;
-    const { text } = this.state;
+  const onKeyDown = (ev) => {
+    const { id, onEditText } = props;
     if (ev.keyCode === 13) {
-      onEditText(id, text);
+      onEditText(id, editText);
     }
   };
 
-  render() {
-    const { onBlur } = this.props;
-    const { text } = this.state;
+  const { onBlur } = props;
 
-    return (
-      <input
-        type="text"
-        className="edit"
-        onKeyDown={(ev) => this.onKeyDown(ev)}
-        onBlur={onBlur}
-        onChange={this.handleInputChange}
-        value={text}
-      />
-    );
-  }
-}
+  return (
+    <input
+      id="inputEdit"
+      type="text"
+      className="edit"
+      onKeyDown={(ev) => onKeyDown(ev)}
+      onBlur={onBlur}
+      onChange={handleInputChange}
+      value={editText}
+    />
+  );
+};
 
 TaskInput.propTypes = {
   text: PropTypes.string.isRequired,
@@ -46,3 +38,5 @@ TaskInput.propTypes = {
   onEditText: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
 };
+
+export default TaskInput;
